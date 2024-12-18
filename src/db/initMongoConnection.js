@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 import { getEnvVar } from '../utils/getEnvVar.js';
 
-const db_host = getEnvVar('DB_HOST');
+const db_host = getEnvVar('MONGODB_HOST');
 
 export const initMongoConnection = async () => {
   try {
