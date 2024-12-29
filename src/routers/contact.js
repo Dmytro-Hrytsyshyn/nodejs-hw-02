@@ -8,6 +8,16 @@ import {Router} from 'express';
 
   contactsRouter.get('/', ctrlWraper(contactController.getContactController) );
 
-  contactsRouter.get('/:id', ctrlWraper(contactController.getContactByIdController) );
+  contactsRouter.get('/:id', ctrlWraper(contactController.getContactByIdController));
+
+  contactsRouter.post('/', ctrlWraper(contactController.addContactController) );
+
+  contactsRouter.put('/:id', ctrlWraper(contactController.upsertContactController));
+
+  contactsRouter.patch('/:id', ctrlWraper(contactController.patchContactController));
+
+  contactsRouter.delete('/:id', ctrlWraper(contactController.deleteContactController));
+
+
 
   export default contactsRouter;

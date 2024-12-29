@@ -13,7 +13,7 @@ const contactSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true },
+  {versionKey: false, timestamps:true },
 );
 
 export const ContactCollection = mongoose.model('contact', contactSchema);
