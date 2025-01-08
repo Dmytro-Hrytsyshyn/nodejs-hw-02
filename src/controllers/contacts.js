@@ -1,13 +1,33 @@
 import * as contactServices from '../services/contacts.js';
 
 import createError from 'http-errors';
+import { parsePagionationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { sortByList } from '../db/models/contactShema.js';
 
 export const getContactController = async (req, res) => {
-  const data = await contactServices.getContacts();
+  const { page, perPage } = parsePagionationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
+
+  const { items, totalItems, totalPages, hasPreviousPage, hasNextPage } =
+    await contactServices.getContacts({
+      page,
+      perPage,
+      sortBy,
+      sortOrder,
+    });
   res.json({
     status: 200,
     message: 'Successfully found contacts',
-    data,
+    data: {
+      data: items,
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+    },
   });
 };
 

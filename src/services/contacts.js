@@ -1,6 +1,29 @@
 import { ContactCollection } from '../db/models/contactShema.js';
 
-export const getContacts = () => ContactCollection.find();
+import { calcPaginationData } from '../utils/calcPaginationData.js';
+
+export const getContacts = async ({
+  page = 1,
+  perPage = 10,
+  sortBy = 'name',
+  sortOrder = 'asc',
+}) => {
+  const limit = perPage;
+  const skip = (page - 1) * limit;
+  const items = await ContactCollection.find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: sortOrder });
+  const total = await ContactCollection.countDocuments();
+
+  const pagionationData = calcPaginationData({ total, page, perPage });
+
+  return {
+    items,
+    total,
+    ...pagionationData,
+  };
+};
 
 export const getContactById = (id) => ContactCollection.findById(id);
 

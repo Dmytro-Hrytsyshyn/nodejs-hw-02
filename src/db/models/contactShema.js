@@ -19,7 +19,14 @@ const contactSchema = new mongoose.Schema(
   },
   { versionKey: false, timestamps: true },
 );
-
+export const sortByList = [
+  '_id',
+  'name',
+  'phoneNumber',
+  'email',
+  'isFavourite',
+  'contactType',
+];
 contactSchema.post('save', handleSaveError);
 contactSchema.pre('findOneAndUpdate', setUpdateSetting);
 contactSchema.post('findOneAndUpdate', handleSaveError);
