@@ -14,13 +14,13 @@ export const getContacts = async ({
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder });
-  const total = await ContactCollection.countDocuments();
+  const totalItems = await ContactCollection.countDocuments();
 
-  const pagionationData = calcPaginationData({ total, page, perPage });
+  const pagionationData = calcPaginationData({ totalItems, page, perPage });
 
   return {
     items,
-    total,
+    totalItems,
     ...pagionationData,
   };
 };
