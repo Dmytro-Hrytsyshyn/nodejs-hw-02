@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import { typeList } from '../../constant/contactsConst.js';
 
 import { handleSaveError, setUpdateSetting } from './hooks.js';
-import { required } from 'joi';
 
 const contactSchema = new mongoose.Schema(
   {
@@ -38,3 +37,7 @@ contactSchema.pre('findOneAndUpdate', setUpdateSetting);
 contactSchema.post('findOneAndUpdate', handleSaveError);
 
 export const ContactCollection = mongoose.model('contact', contactSchema);
+
+const ContactsCollection = mongoose.model('contacts', contactSchema);
+
+export default ContactsCollection;
