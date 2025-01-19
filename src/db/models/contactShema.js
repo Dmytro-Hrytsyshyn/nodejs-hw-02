@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { typeList } from '../../constant/contactsConst.js';
 
 import { handleSaveError, setUpdateSetting } from './hooks.js';
+import { required } from 'joi';
 
 const contactSchema = new mongoose.Schema(
   {
@@ -14,6 +15,11 @@ const contactSchema = new mongoose.Schema(
       type: String,
       enum: typeList,
       default: 'personal',
+      required: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
       required: true,
     },
   },
