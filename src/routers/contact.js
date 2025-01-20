@@ -4,6 +4,7 @@ import * as contactController from '../controllers/contacts.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { validateBody } from '../utils/validateBody.js';
+import { upload } from '../middlewares/multer.js';
 
 import {
   contactsAddSchema,
@@ -15,6 +16,12 @@ import { ctrlWraper } from '../utils/ctrlWraper.js';
 const contactsRouter = Router();
 
 contactsRouter.use(authenticate);
+
+contactsRouter.get(
+  '/',
+  upload.single('photo'),
+  ctrlWraper(contactController.getContactsController),
+);
 
 contactsRouter.get('/', ctrlWraper(contactController.getContactController));
 
