@@ -26,6 +26,7 @@ export const getContactController = async (req, res) => {
       totalItems,
       totalPages,
       hasPreviousPage,
+      hasNextPage,
     },
   });
 };
