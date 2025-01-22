@@ -41,6 +41,4 @@ contactSchema.post('findOneAndUpdate', handleSaveError);
 
 export const ContactCollection = mongoose.model('contact', contactSchema);
 
-const ContactsCollection = mongoose.model('contacts', contactSchema);
-
-export default ContactsCollection;
+export default ContactCollection;
