@@ -40,8 +40,13 @@ export const getAllContacts = async ({
   };
 };
 
-export const getContactById = async (contactId) =>
-  await ContactsCollection.findById(contactId);
+export const getContactById = async (contactId) => {
+  const contact = await ContactsCollection.findById(contactId);
+  if (!contact) {
+    throw new Error(`Contact with id=${contactId} not found`);
+  }
+  return contact;
+};
 
 export const getContact = (filter) => ContactsCollection.findOne(filter);
 
