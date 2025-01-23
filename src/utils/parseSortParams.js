@@ -1,13 +1,13 @@
-const sortOrderList = ['asc', 'desc'];
+// import { sortByList } from "../db/models/Contacts.js";
 
-export const parseSortParams = ({ sortBy, sortOrder }, sortByList) => {
-  const parsedSortOrder = sortOrderList.includes(sortOrder)
-    ? sortOrder
-    : sortOrderList[0];
-  const parsedSortBy = sortByList.includes(sortBy) ? sortBy : '_id';
+const sortOrderList = ["asc", "desc"];
 
-  return {
-    sortBy: parsedSortBy,
-    sortOrder: parsedSortOrder,
-  };
-};
+export const parseSortParams = ({ sortBy, sortOrder }) => {
+    const parsedSortOrder = sortOrderList.includes(sortOrder) ? sortOrder : sortOrderList[0];
+    const parsedSortBy = sortByList.includes(sortBy) ? sortBy : "_id";
+
+    return {
+        sortBy: parsedSortBy,
+        sortOrder: parsedSortOrder,
+    }
+}

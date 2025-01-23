@@ -1,7 +1,7 @@
-import pino from 'pino-http';
+import pino from "pino-http";
 
-export const logger  = pino({
+export const logger = pino({
     transport: {
-      target: 'pino-pretty',
-    },
-  });
+        target: "pino-pretty"
+    }
+})
