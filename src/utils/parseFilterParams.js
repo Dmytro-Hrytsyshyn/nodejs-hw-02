@@ -1,45 +1,28 @@
-import { typeList } from "../constants/contacts.js"
+const parseContactType = (contactType) => {
+  const isString = typeof contactType === 'string';
+  if (!isString) return;
 
-const filterType = (type) => {
-    // if (typeof type !== "string") return
-    // if ([...typeList].includes(type)) return type
-    const isString = typeof type === 'string';
-    if (!isString) return;
+  const isContactType = ['work', 'home', 'personal'].includes(contactType);
+  if (isContactType) return contactType;
+};
 
-    const isKnownType = ['work', 'home', 'personal'].includes(type);
+const parseIsFavourite = (isFavourite) => {
+  const isString = typeof isFavourite === 'string';
+  if (!isString) return;
 
-    if (isKnownType) return type;
-}
+  const isIsFavourite = ['true', 'false'].includes(isFavourite);
+  if (!isIsFavourite) return;
 
-const filterIsFavorite = (param) => {
-    // if (typeof param !== "string") return;
-    // if (['true', 'false'].includes(param)) return param
-    const isString = typeof param === 'string';
+  return isFavourite === 'true';
+};
+export const parseFilterParams = (query) => {
+  const { type, isFavourite } = query;
 
-    if (!isString) return;
+  const parsedType = parseContactType(type);
+  const parsedIsFavourite = parseIsFavourite(isFavourite);
 
-    const isBoolean = ['true', 'false'].includes(param);
-
-    if (isBoolean) return param;
-}
-
-export const parseContactFilterParams = (query) => {
-    // const { contactType, isFavourite } = query;
-
-    // const parsedType = filterType(contactType);
-    // const parsedIsFavourite = filerIsFavorite(isFavourite);
-
-    // return {
-    //     type: parsedType,
-    //     isFavourite: parsedIsFavourite,
-    // }
-    const { contactType, isFavourite } = query;
-
-    const parsedType = filterType(contactType);
-    const parsedIsFavourite = filterIsFavorite(isFavourite);
-
-    return {
-        type: parsedType,
-        isFavourite: parsedIsFavourite,
-    };
-}
+  return {
+    type: parsedType,
+    isFavourite: parsedIsFavourite,
+  };
+};
