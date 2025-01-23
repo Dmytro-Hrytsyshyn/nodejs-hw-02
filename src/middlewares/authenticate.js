@@ -1,35 +1,46 @@
-import createHttpError from "http-errors";
+import createHttpError from 'http-errors';
 
-import { findSession, findUser } from "../services/auth.js";
+import { SessionsCollection } from '../db/models/session.js';
+import { UsersCollection } from '../db/models/user.js';
 
 export const authenticate = async (req, res, next) => {
-    //     const { authorization } = req.headers;
+  const authHeader = req.get('Authorization');
 
-    const authHeader = req.get("Authorization");
-    if (!authHeader) {
-        return next(createHttpError(401, "Authorization header missing"));
-    }
+  if (!authHeader) {
+    next(createHttpError(401, 'Please provide Authorization header'));
+    return;
+  }
 
-    const [bearer, token] = authHeader.split(' ')
-    if (bearer !== "Bearer") {
-        return next(createHttpError(401, "Authorization header must be type Bearer"));
-    }
+  const bearer = authHeader.split(' ')[0];
+  const token = authHeader.split(' ')[1];
 
-    const session = await findSession({ accessToken: token });
-    if (!session)
-        return next(createHttpError(401, "Session not found"));
+  if (bearer !== 'Bearer' || !token) {
+    next(createHttpError(401, 'Auth header should be of type Bearer'));
+    return;
+  }
 
-    if (Date.now() > session.accessTokenValidUntil) {
-        return next(createHttpError(401, "Access token expired"));
-    }
+  const session = await SessionsCollection.findOne({ accessToken: token });
 
-    const user = await findUser({ _id: session.userId });
+  if (!session) {
+    next(createHttpError(401, 'Session not found'));
+    return;
+  }
 
-    if (!user) {
-        return next(createHttpError(401, "User not found"));
-    }
+  const isAccessTokenExpired =
+    new Date() > new Date(session.accessTokenValidUntil);
 
-    req.user = user;
+  if (isAccessTokenExpired) {
+    next(createHttpError(401, 'Access token expired'));
+  }
 
-    next()
-}
+  const user = await UsersCollection.findOne({ _id: session.userId });
+
+  if (!user) {
+    next(createHttpError(401, 'User not found'));
+    return;
+  }
+
+  req.user = user;
+
+  next();
+};
