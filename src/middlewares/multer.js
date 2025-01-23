@@ -1,28 +1,26 @@
-import createHttpError from 'http-errors';
 import multer from 'multer';
-import { TEMP_UPLOAD_DIR } from '../constant/index.js';
+import { TEMP_UPLOAD_DIR } from '../constants/index.js';
+import createHttpError from 'http-errors';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, TEMP_UPLOAD_DIR);
   },
-  filename: (req, file, cb) => {
-    const uniquePrefix = `${Date.now()}_${Math.round(Math.random() * 159)}`;
-    const filename = `${uniquePrefix}_${file.originalname}`;
-    cb(null, filename);
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now();
+    cb(null, `${uniqueSuffix}_${file.originalname}`);
   },
 });
-
 const limits = {
   fileSize: 1024 * 1024 * 5,
 };
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (req, file, cd) => {
   const extention = file.originalname.split('.').pop();
   if (extention === 'exe') {
-    return cb(createHttpError(400, 'file with .exe extention not allow'));
+    return cd(createHttpError(400, 'File with .exe extention not allow'));
   }
-  cb(null, true);
+  cd(null, true);
 };
 
-export const upload = multer({ storage, fileFilter, limits });
+export const upload = multer({ storage, limits, fileFilter });
