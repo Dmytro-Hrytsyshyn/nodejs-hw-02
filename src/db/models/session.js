@@ -13,4 +13,4 @@ const sessionsSchema = new Schema(
 
 export const SessionsCollection = model('sessions', sessionsSchema);
 
-const asd = 54;
+const a = b;
