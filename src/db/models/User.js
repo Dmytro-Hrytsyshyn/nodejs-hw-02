@@ -1,34 +1,30 @@
-import mongoose from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { handleSaveError, setUpdateSetting } from './hooks.js';
-import { emailRegexp } from '../../constant/User.js';
+import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
-const userSchema = new mongoose.Schema(
-  {
+import { emailRegex } from "../../constants/users.js";
+
+export const userSchema = Schema({
     username: {
-      type: String,
-      required: true,
+        type: String,
+        require: true,
     },
     email: {
-      type: String,
-      match: emailRegexp,
-      unique: true,
-      required: true,
+        type: String,
+        match: emailRegex,
+        unique: true,
+        require: true,
     },
     password: {
-      type: String,
-      required: true,
+        type: String,
+        require: true,
     },
-    photo: {
-      type: String,
-    },
-  },
-  { versionKey: false, timestamps: true },
-);
+}, { versionKey: false, timestamps: true })
 
-userSchema.post('save', handleSaveError);
-userSchema.pre('findOneAndUpdate', setUpdateSetting);
-userSchema.post('findOneAndUpdate', handleSaveError);
+userSchema.post("save", handleSaveError);
+userSchema.pre("findOneAndUpdate", setUpdateSetting);
+userSchema.post("findOneAndUpdate", handleSaveError);
 
-const UserCollection = mongoose.model('user', userSchema);
+const UserCollection = model("user", userSchema);
+
 export default UserCollection;
