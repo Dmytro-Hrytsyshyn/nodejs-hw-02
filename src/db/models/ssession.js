@@ -1,5 +1,3 @@
-// src/db/models/session.js
-
 import { model, Schema } from 'mongoose';
 
 const sessionsSchema = new Schema(
@@ -14,3 +12,5 @@ const sessionsSchema = new Schema(
 );
 
 export const SessionsCollection = model('sessions', sessionsSchema);
+
+const asd = 54;
