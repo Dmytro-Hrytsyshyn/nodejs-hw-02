@@ -73,12 +73,31 @@ export const refreshUserSessionController = async (req, res) => {
 };
 
 export const requestResetEmailController = async (req, res) => {
-  await requestResetToken(req.body.email);
-  res.json({
-    message: 'Reset password email was successfully sent!',
-    status: 200,
-    data: {},
-  });
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({
+      message: '"email" is required',
+      status: 400,
+      data: {},
+    });
+  }
+
+  try {
+    await requestResetToken(email);
+    res.json({
+      message: 'Reset password email was successfully sent!',
+      status: 200,
+      data: {},
+    });
+  } catch (error) {
+    console.error('Error in requestResetEmailController:', error);
+    res.status(500).json({
+      message: error.message || 'Failed to send reset email',
+      status: 500,
+      data: {},
+    });
+  }
 };
 
 export const resetPasswordController = async (req, res) => {

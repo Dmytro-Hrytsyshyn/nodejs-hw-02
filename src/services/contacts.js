@@ -20,17 +20,6 @@ export const getAllContacts = async ({
   if (filter.isFavourite !== undefined) {
     contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
-  // const countContacts = await contactsCollection
-  //   .find()
-  //   .merge(contactsQuery)
-  //   .countDocuments();
-
-  // const contacts = await contactsQuery
-
-  //   .limit(limit)
-  //   .skip(skip)
-  //   .sort({ [sortBy]: sortOrder })
-  //   .exec();
 
   const [countContacts, contacts] = await Promise.all([
     contactsCollection.find().merge(contactsQuery).countDocuments(),
