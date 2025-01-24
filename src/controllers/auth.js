@@ -2,6 +2,7 @@
 
 import { THIRTY_DAYS } from '../constants/users.js';
 import {
+  loginOrSignupWithGoogle,
   loginUser,
   logoutUser,
   refreshUsersSession,
@@ -9,6 +10,7 @@ import {
   requestResetToken,
   resetPassword,
 } from '../services/auth.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
 
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
@@ -73,31 +75,12 @@ export const refreshUserSessionController = async (req, res) => {
 };
 
 export const requestResetEmailController = async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({
-      message: '"email" is required',
-      status: 400,
-      data: {},
-    });
-  }
-
-  try {
-    await requestResetToken(email);
-    res.json({
-      message: 'Reset password email was successfully sent!',
-      status: 200,
-      data: {},
-    });
-  } catch (error) {
-    console.error('Error in requestResetEmailController:', error);
-    res.status(500).json({
-      message: error.message || 'Failed to send reset email',
-      status: 500,
-      data: {},
-    });
-  }
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
 };
 
 export const resetPasswordController = async (req, res) => {
@@ -106,5 +89,27 @@ export const resetPasswordController = async (req, res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+  });
+};
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };
